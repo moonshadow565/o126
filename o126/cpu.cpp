@@ -22,4 +22,20 @@ o126::CPU::Result o126::CPU::exec(BUS &bus) noexcept {
     }
 }
 
+bool o126::CPU::interupt(BUS& bus) noexcept {
+    auto ctx = IMPL::CTX { *this, bus };
+    auto const flags = ctx.flags_get<Flags>();
+    if (flags.interupt) {
+        ctx.push_frame_interupt();
+        (void)ctx.end_interupt(1);
+        return true;
+    }
+    return false;
+}
 
+bool o126::CPU::interupt_nmi(BUS& bus) noexcept {
+    auto ctx = IMPL::CTX { *this, bus };
+    ctx.push_frame_interupt();
+    (void)ctx.end_interupt(2);
+    return true;
+}

@@ -155,10 +155,12 @@ struct o126::CPU::IMPL::EXE final {
     template <byte_t OP> requires(match8("10010reg", OP))
     [[nodiscard]] static constexpr Result op(CTX ctx) noexcept {
         constexpr auto const reg = static_cast<REG>(OP & 7);
-        auto const value1 = ctx.reg_get<word_t>(REG::AX);
-        auto const value2 = ctx.reg_get<word_t>(reg);
-        ctx.reg_set<word_t>(REG::AX, value2);
-        ctx.reg_set<word_t>(reg, value1);
+        if constexpr (reg != REG::AX) {
+            auto const value1 = ctx.reg_get<word_t>(REG::AX);
+            auto const value2 = ctx.reg_get<word_t>(reg);
+            ctx.reg_set<word_t>(reg, value1);
+            ctx.reg_set<word_t>(REG::AX, value2);
+        }
         return ctx.end_next();
     }
 

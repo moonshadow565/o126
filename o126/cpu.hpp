@@ -103,7 +103,7 @@ private:
         ZERO = 1,
     };
 
-    struct Flags {
+    struct Flags final {
         bool carry : 1 = {};        // 0    1           0x0001
         bool reserved1 : 1 = {};    // 1    2           0x0002
         bool parity : 1 = {};       // 2    4           0x0004
@@ -137,6 +137,8 @@ private:
     struct IMPL;
 public:
     Result exec(BUS& bus) noexcept;
+    bool interupt(BUS& bus) noexcept;
+    bool interupt_nmi(BUS& bus) noexcept;
 };
 }
 
