@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wold-style-cast -Wnarrowing -Wno-unknown-pragmas")
 
 add_executable(o126
+    o126/bus.hpp
+    o126/common.hpp
     o126/cpu.cpp
     o126/cpu.hpp
     o126/cpu/impl.hpp
@@ -17,4 +19,6 @@ add_executable(o126
     o126/cpu/impl_decode.hpp
     o126/cpu/impl_exe.hpp
     o126/cpu/impl_misc.hpp
+    o126/pic.hpp
+    o126/pit.hpp
     main.cpp)

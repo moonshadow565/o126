@@ -53,13 +53,4 @@ struct o126::CPU::IMPL final {
         }
         return true;
     }
-
-    template <bool sign_extend = true, typename T>
-    [[nodiscard]] static constexpr auto to_signed(T val) noexcept {
-        if constexpr (sign_extend) {
-            return static_cast<std::make_signed_t<T>>(val);
-        } else {
-            return static_cast<std::make_unsigned_t<T>>(val);
-        }
-    }
 };

@@ -9,8 +9,7 @@
 
 using namespace o126;
 
-struct MEM : CPU::BUS {
-    using FAR = CPU::FAR;
+struct MEM : BUS {
     std::array<byte_t, 0x10'00'00> data = {};
 
     constexpr MEM() noexcept = default;

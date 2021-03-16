@@ -1,65 +1,15 @@
 #ifndef O126_CPU_HPP
 #define O126_CPU_HPP
-#include <cinttypes>
+#include "common.hpp"
+#include "bus.hpp"
 
-namespace o126 {
-using byte_t = std::uint8_t;
-using word_t = std::uint16_t;
-using dword_t = std::uint32_t;
-using sbyte_t = std::int8_t;
-using sword_t = std::int16_t;
-using sdword_t = std::int32_t;
-
-struct CPU final {
+struct o126::CPU final {
 public:
     enum class Result {
         DONE,
         PREFIX,
         HALT,
         WAIT,
-    };
-
-    struct FAR final {
-        word_t disp = {};
-        word_t seg = {};
-
-        constexpr FAR() noexcept = default;
-
-        constexpr FAR(word_t disp, word_t seg) noexcept : disp(disp), seg(seg) {}
-
-        constexpr FAR& operator-= (sword_t rhs) noexcept {
-            disp += rhs;
-            return *this;
-        }
-
-        constexpr FAR& operator+= (sword_t rhs) noexcept {
-            disp += rhs;
-            return *this;
-        }
-
-        constexpr FAR operator-(sword_t rhs) const noexcept {
-            return FAR { static_cast<word_t>(disp - rhs), seg };
-        }
-
-        constexpr FAR operator+(sword_t rhs) const noexcept {
-            return FAR { static_cast<word_t>(disp + rhs), seg };
-        }
-
-        constexpr dword_t ea() const noexcept {
-            return (disp + (seg << 4)) & 0xF'FF'FF;
-        }
-    };
-
-    struct BUS {
-        constexpr virtual byte_t read_byte(FAR addr) noexcept = 0;
-        constexpr virtual void write_byte(FAR addr, byte_t val) noexcept = 0;
-        constexpr virtual word_t read_word(FAR addr) noexcept = 0;
-        constexpr virtual void write_word(FAR addr, word_t val) noexcept = 0;
-
-        constexpr virtual byte_t in_byte(word_t port) noexcept = 0;
-        constexpr virtual void out_byte(word_t port, byte_t val) noexcept = 0;
-        constexpr virtual word_t in_word(word_t port) noexcept = 0;
-        constexpr virtual void out_word(word_t port, word_t val) noexcept = 0;
     };
 private:
     enum class REG : sbyte_t {
@@ -140,7 +90,5 @@ public:
     bool interupt(BUS& bus) noexcept;
     bool interupt_nmi(BUS& bus) noexcept;
 };
-}
-
 
 #endif // O126_HPP
